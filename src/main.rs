@@ -1,4 +1,6 @@
+use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
+
 fn n_power(mut x: i32, mut e: i32, m: i32) -> i32 {
     let mut res: i32 = 1;
 
@@ -22,7 +24,7 @@ fn is_bool(n: i32, k: i32) -> bool {
     }
     while k > 0 {
         let mut rng = rand::thread_rng();
-        let test: i32 = rng.gen();
+        let test: i32 = rng.gen_range(0..1);
         let a: i32 = test * (n - 3) + 2;
         println!("{}", a);
 
@@ -33,9 +35,8 @@ fn is_bool(n: i32, k: i32) -> bool {
 
     return true;
 }
+
 fn main() {
-    // let mut rng = rand::thread_rng();
-    println!("{:?}", is_bool(5, 10));
-    // let x: u8 = rng.gen();
-    // println!("{:?}", x);
+    let num = rand::thread_rng().gen_range(0..100);
+    println!("{}", num);
 }
