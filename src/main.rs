@@ -1,6 +1,12 @@
 use rand::distributions::{Distribution, Uniform};
 use rand::Rng;
+/*
+x:base
+e:exponents
+m:mod
 
+
+*/
 fn n_power(mut x: i32, mut e: i32, m: i32) -> i32 {
     let mut res: i32 = 1;
     //e가 0보다 클떄까지
@@ -11,6 +17,7 @@ fn n_power(mut x: i32, mut e: i32, m: i32) -> i32 {
             e = e - 1;
         //아니면
         } else {
+            //2=(2*2)%2
             x = (x * x) % m;
             e = e / 2;
         }
@@ -26,6 +33,7 @@ fn is_bool(n: i32, k: i32) -> bool {
     } else if n <= 3 {
         return true;
     }
+    //k가 0보다 크면
     while k > 0 {
         let mut rng = rand::thread_rng();
         let test: i32 = rng.gen_range(1..10);
@@ -41,7 +49,8 @@ fn is_bool(n: i32, k: i32) -> bool {
 }
 
 fn main() {
-    is_bool(1, 2);
-    let num: f64 = rand::thread_rng().gen_range(0.0..1.0);
+    is_bool(1, 0);
+    let num = rand::thread_rng().gen_range(0..1);
     println!("{:?}", is_bool(1, 2));
+    println!("{:?}", num);
 }
