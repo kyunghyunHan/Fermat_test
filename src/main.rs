@@ -1,59 +1,81 @@
-struct DivisorGen {
-    curr: u64,
-    last: u64,
-}
+use rand::Rng;
+/*
+k 값이 클수록 정답일 확률을 나타낸다
+- 복합 입력에 대한  결과가 높아진다 ,소수를 위해
+- 입력,결과를 항상정확함
+- 다음 k번 반복
+- a[2,n-2]범위에서 임으로 선택
+- b)gcd(a,n)!=1이면 false를 반환
+- c)n-1 !==1(mod n) 그런다음 fasle 를 반환
+2t true아마도 프라임 반환
 
-impl Iterator for DivisorGen {
-    type Item = u64;
+*/
+fn power(mut a: i32, mut n: i32, p: i32) -> i32 {
+    let mut res = 1;
 
-    fn next(&mut self) -> Option<u64> {
-        self.curr += 2u64;
+    a = a % p;
 
-        if self.curr < self.last {
-            None
-        } else {
-            Some(self.curr)
+    while n > 0 {
+        if n == 1 {
+            res = (res * a) % p;
         }
+        n = n / 2;
+        a = (a * a) % p;
     }
+    return res;
 }
-
-fn divisor_gen(num: u64) -> DivisorGen {
-    DivisorGen {
-        curr: 0u64,
-        last: (num / 2u64) + 1u64,
-    }
-}
-
-fn is_prime(num: u64) -> bool {
-    if num == 2 || num == 3 {
-        return true;
-    } else if num % 2 == 0 || num % 3 == 0 || num <= 1 {
-        return false;
+fn gcd(a: i32, b: i32) -> i32 {
+    if a < b {
+        return gcd(b, a);
+    } else if a % b == 0 {
+        return b;
     } else {
-        for i in divisor_gen(num) {
-            if num % i == 0 {
-                return false;
-            }
+    }
+    return gcd(b, a % b);
+}
+
+fn prime(n: i32, mut k: i32) -> bool {
+    if n <= 1 || n == 4 {
+        return false;
+    }
+    if n <= 3 {
+        return true;
+    }
+
+    while k > 0 {
+        let num: f64 = rand::thread_rng().gen_range(0.0..1.0);
+
+        let a = 2 as f64 + num % (n as f64 - 4 as f64);
+        // println!("{}", a);
+        if gcd(n, a as i32) != 1 {
+            // println!("{}", a);
+            return false;
         }
+        if power(a as i32, n - 1, n) != 1 {
+            return false;
+        }
+        k = k - 1
     }
     return true;
 }
 
 fn main() {
-    let fermat_closure = |i: u32| -> u64 { 2u64.pow(2u32.pow(i + 1u32)) };
-    let mut f_numbers: Vec<u64> = Vec::new();
-
-    println!("First 4 Fermat numbers:");
-    for i in 0..4 {
-        let f = fermat_closure(i) + 1u64;
-        f_numbers.push(f);
-        println!("F{}: {}", i, f);
-    }
-
-    println!("Factor of the first four numbers:");
-    for f in f_numbers.iter() {
-        let is_prime: bool = f % 4 == 1 && is_prime(*f);
-        let not_or_not = if is_prime { " " } else { " not " };
-        println!("{} is{}prime", f, not_or_not);
-    }
+    let k = 11540;
+    println!("{}", prime(1, k));
+    println!("{}", prime(2, k));
+    println!("{}", prime(3, k));
+    println!("{}", prime(4, k));
+    println!("{}", prime(5, k));
+    println!("{}", prime(6, k));
+    println!("{}", prime(7, k));
+    println!("{}", prime(8, k));
+    println!("{}", prime(9, k));
+    println!("{}", prime(10, k));
+    println!("11{}", prime(11, k));
+    println!("12{}", prime(12, k));
+    println!("13{}", prime(13, k));
+    println!("{}", prime(14, k));
+    println!("{}", prime(15, k));
+    println!("{}", prime(16, k));
+    println!("{}", prime(17, k));
 }
