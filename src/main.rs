@@ -10,72 +10,43 @@ k 값이 클수록 정답일 확률을 나타낸다
 2t true아마도 프라임 반환
 
 */
-fn power(mut a: i32, mut n: i32, p: i32) -> i32 {
-    let mut res = 1;
+fn modulo(base: i32, mut e: i32, m: i32) -> i32 {
+    let mut a: i32 = 1;
+    let mut b = base.clone();
 
-    a = a % p;
-
-    while n > 0 {
-        if n == 1 {
-            res = (res * a) % p;
+    while e > 0 {
+        if e % 2 == 1 {
+            a = (a * b) % m;
         }
-        n = n / 2;
-        a = (a * a) % p;
+        b = (b * b) % m;
+        e = e / 2;
     }
-    return res;
-}
-fn gcd(a: i32, b: i32) -> i32 {
-    if a < b {
-        return gcd(b, a);
-    } else if a % b == 0 {
-        return b;
-    } else {
-    }
-    return gcd(b, a % b);
+    return a % m;
 }
 
-fn prime(n: i32, mut k: i32) -> bool {
-    if n <= 1 || n == 4 {
+fn fermat(m: i32, it: i32) -> bool {
+    if m == 1 {
         return false;
     }
-    if n <= 3 {
-        return true;
-    }
-
-    while k > 0 {
+    for i in 0..it {
         let num: f64 = rand::thread_rng().gen_range(0.0..1.0);
-
-        let a = 2 as f64 + num % (n as f64 - 4 as f64);
-        // println!("{}", a);
-        if gcd(n, a as i32) != 1 {
-            // println!("{}", a);
+        let x = num % (m as f64 - 1 as f64) + 1 as f64;
+        println!("{}", x);
+        if modulo(x as i32, m - 1, m) != 1 {
+            println!("{}", modulo(x as i32, m - 1, m));
             return false;
         }
-        if power(a as i32, n - 1, n) != 1 {
-            return false;
-        }
-        k = k - 1
     }
     return true;
 }
 
 fn main() {
-    let k = 11540;
-    println!("{}", prime(1, k));
-    println!("{}", prime(2, k));
-    println!("{}", prime(3, k));
-    println!("{}", prime(4, k));
-    println!("{}", prime(5, k));
-    println!("{}", prime(6, k));
-    println!("{}", prime(7, k));
-    println!("{}", prime(8, k));
-    println!("{}", prime(9, k));
-    println!("{}", prime(10, k));
-    println!("11{}", prime(11, k));
-    println!("12{}", prime(12, k));
-    println!("13{}", prime(13, k));
-    println!("{}", prime(14, k));
-    println!("{}", prime(15, k));
-    println!("{}", prime(16, k));
-    println!("{}", prime(17, k));
+    let it = 50;
+    let num = 479001599;
+
+    if fermat(num, it) {
+        println!("{}", "is prime");
+    } else {
+        println!("{}", "is not prime")
+    }
 }
